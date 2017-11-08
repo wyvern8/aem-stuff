@@ -17,4 +17,9 @@ if [ $# -lt 3 ]; then
     exit 1
 fi
 
-curl -sk -u $2:$3 "$1/bin/querybuilder.json?path=/home&p.limit=-1&p.hits=full&property=jcr:primaryType&property.1_value=rep:Group&property.2_value=rep:User" 2>&1 | sed 's/jcr\://g' | sed 's/rep\://g' |jq '.hits | map([.primaryType, .principalName, .path] | join(", ")) | join("\n")' | sed 's/\\n/\n/g' | sed 's/"//g' | sort
+echo "type, principalName, path"
+# curl aem querybuilder requesting nodes under /home of jcr:primaryType = rep:Group or rep:User ..
+curl -sk -u $2:$3 "$1/bin/querybuilder.json?path=/home&p.limit=-1&p.hits=full&property=jcr:primaryType&property.1_value=rep:Group&property.2_value=rep:User" \
+2>&1 | sed 's/jcr\://g' | sed 's/rep\://g' | # ..strip attribute namespaces causing jq to choke when mapping..
+jq '.hits | map([.primaryType, .principalName, .path] | join(", ")) | join("\n")' | # .. and use jq to map results to csv..
+sed 's/\\n/\n/g' | sed 's/"//g' | sort # .. then clean up csv linefeeds and quotes, and sort. done!
