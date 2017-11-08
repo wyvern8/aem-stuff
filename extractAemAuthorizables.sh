@@ -17,7 +17,9 @@ if [ $# -lt 3 ]; then
     exit 1
 fi
 
-echo "type, principalName, path"
+# csv header
+echo "primaryType, principalName, path"
+
 # curl aem querybuilder requesting nodes under /home of jcr:primaryType = rep:Group or rep:User ..
 curl -skG -u $2:$3 "$1/bin/querybuilder.json" \
 -d "path=/home&p.limit=-1&p.hits=full&property=jcr:primaryType&property.1_value=rep:Group&property.2_value=rep:User" \
