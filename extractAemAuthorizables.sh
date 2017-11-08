@@ -7,7 +7,7 @@ display_usage() {
     echo "eg. ./extractAemAuthorizables.sh http://localhost:4502 admin admin"
 }
 
-if [ $# -eq 0 ]; then
+if [ $# -lt 3 ]; then
     display_usage
     exit 1
 fi
