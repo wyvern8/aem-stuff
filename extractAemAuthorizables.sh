@@ -24,3 +24,5 @@ curl -skG -u $2:$3 "$1/bin/querybuilder.json" \
 2>&1 | sed 's/jcr\://g' | sed 's/rep\://g' | # ..strip attribute namespaces causing jq to choke when mapping..
 jq '.hits | map([.primaryType, .principalName, .path] | join(", ")) | join("\n")' | # .. and use jq to map results to csv..
 sed 's/\\n/\n/g' | sed 's/"//g' | sort # .. then clean up csv linefeeds and quotes, and sort. done!
+
+# write to csv file with: ./extractAemAuthorizables.sh http://localhost:4502 admin admin > usersAndGroups.csv
